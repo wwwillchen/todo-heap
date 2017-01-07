@@ -1,3 +1,42 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: hsl(222, 11%, 18%);
+}
+
 #app {
-  margin-top: 16px;
+  padding: 16px 16px 0px 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+#header {
+  flex-basis: 5vh;
+}
+
+#header > .ui.header {
+  color: white;
+}
+
+#main {
+  flex-basis: 90vh;
+  max-height: 90vh;
+  overflow-y: scroll;
+
+}
+
+#main > .ui.message {
+  background: hsla(222, 13%, 24%, 0.92);
+    color: #e7e7f5;
+}
+
+#footer {
+  flex-basis: 5vh;
+  padding: 16px;
+}
+
+#footer > input {
+  background: #57636d;
 }
