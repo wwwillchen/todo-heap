@@ -9,5 +9,5 @@ export interface MessageItemProps {
 }
 
 export const MessageItemWidget = (props: MessageItemProps) => (
-  <Message.Item>P{props.priority} {props.text}</Message.Item>
+  <Message.Item>P{props.priority} {props.text} [{props.id.slice(0,8)}]</Message.Item>
 )

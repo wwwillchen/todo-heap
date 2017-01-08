@@ -6,18 +6,30 @@ import { connect } from 'react-redux'
 
 import {App, AppProps} from './web_ui/app';
 import {todoReducer} from './todo_reducer/todo_reducer';
-import {State, mapStateToProps} from './todo_state/state';
-import {mapDispatchToProps} from './todo_action/actions';
+import {State} from './todo_state/state';
+import {textInputActionCreator} from './todo_action/actions';
 
-import {messageStubs} from './test_helpers/stubs';
+import {messageStubs, todoStubs} from './test_helpers/stubs';
 
 const preloadedState: State = {
   messageGroups: messageStubs,
   todoMap: new Map(),
-  todoHeap: [],
+  todoHeap: todoStubs,
 };
 
-const store = createStore(todoReducer, preloadedState);
+const w = window as any;
+const store = createStore(todoReducer, preloadedState,
+    w.__REDUX_DEVTOOLS_EXTENSION__ && w.__REDUX_DEVTOOLS_EXTENSION__()
+);
+
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatch,
+  actions: bindActionCreators({textInputActionCreator}, dispatch)
+});
+
+const mapStateToProps = (state: State) => ({
+  messageGroups: state.messageGroups,
+});
 
 const ConnectedApp = connect(
   mapStateToProps,

@@ -6,7 +6,3 @@ export interface State {
   todoMap: Map<string, TodoModel>,
   messageGroups: MessageGroups,
 }
-
-export const mapStateToProps = (state: State) => ({
-  messageGroups: state.messageGroups,
-});

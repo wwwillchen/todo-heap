@@ -1,22 +1,13 @@
-import { createStore, bindActionCreators } from 'redux'
+export const TEXT_INPUT = 'TEXT_INPUT';
 
-export const ADD_TODO = 'ADD_TODO'
-export const REMOVE_TODO = 'REMOVE_TODO'
-
-function addTodo(text: string) {
-  return {
-    type: ADD_TODO,
-    text,
-  }
+export interface Action {
+  type: string;
+  command: string;
 }
 
-function removeTodo(id: string) {
+export function textInputActionCreator(command: string): Action {
   return {
-    type: REMOVE_TODO,
-    id,
+    type: TEXT_INPUT,
+    command,
   }
 }
-
-export const mapDispatchToProps = (dispatch: any) => ({
-    actions: bindActionCreators({addTodo, removeTodo}, dispatch)
-})
