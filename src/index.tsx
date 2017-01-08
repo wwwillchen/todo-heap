@@ -15,6 +15,7 @@ const preloadedState: State = {
   messageGroups: messageStubs,
   todoMap: new Map(),
   todoHeap: todoStubs,
+  todoRefs: new Map(),
 };
 
 const w = window as any;

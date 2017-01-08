@@ -7,3 +7,15 @@ export function guid(): string {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }
+
+export function includes<T>(container: T[], target: T): boolean {
+  return container.indexOf(target) !== -1;
+}
+
+interface Predicate<T> {
+  (value: T, index?: number): boolean;
+}
+
+export function reject<T>(container: T[], iteratee: Predicate<T>): T[] {
+  return container.filter(value => !iteratee(value));
+}

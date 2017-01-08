@@ -1,7 +1,9 @@
 import {State} from '../todo_state/state';
+import {TodoModel} from '../todo/todo_entity';
 import {TodoFactory} from '../todo/todo_factory';
-import {MessageGroupFactory} from '../message_presenter/message_factory';
+import {MessageGroupFactory, TodoViewModel} from '../message_presenter/message_factory';
 import {textInputActionCreator, Action, TEXT_INPUT} from '../todo_action/actions';
+import {reject, includes} from '../utils';
 
 export const todoReducer = (state: State, action: Action): State => {
   const newState = Object.assign({}, state);
@@ -14,56 +16,91 @@ export const todoReducer = (state: State, action: Action): State => {
     case 'list':
       return list(newState, parsedAction);
     case 'remove':
+      parsedAction.targets = mapTargets(newState, parsedAction.targets);
       return remove(newState, parsedAction);
+    case 'invalid':
+      return invalid(newState, parsedAction);
   }
   return newState;
 };
 
-const add = (state: State, parsedAction: addCommand): State => {
+const add = (state: State, parsedAction: AddCommand): State => {
   const todo = TodoFactory.createTodo(parsedAction.text);
   state.todoHeap = [todo, ...state.todoHeap];
-  let messageGroup = MessageGroupFactory.create(parsedAction.command, [todo]);
+  let todoViewModels;
+  ({state, todoViewModels} = mapRefs(state, [todo]));
+  let messageGroup = MessageGroupFactory.create(parsedAction.command, todoViewModels);
   state.messageGroups = [...state.messageGroups, messageGroup];
   return state;
 };
 
-const list = (state: State, parsedAction: listCommand): State => {
-  let messageGroup = MessageGroupFactory.create(parsedAction.command, state.todoHeap.slice(0, 5));
+const DEFAULT_SIZE = 5;
+
+const list = (state: State, parsedAction: AbstractCommand): State => {
+  let todoViewModels;
+  ({state, todoViewModels} = mapRefs(state, state.todoHeap.slice(0, DEFAULT_SIZE)));
+  let messageGroup = MessageGroupFactory.create(parsedAction.command, todoViewModels);
   state.messageGroups = [...state.messageGroups, messageGroup];
   return state;
 };
 
-const remove = (state: State, parsedAction: removeCommand): State => {
-  state.todoHeap = state.todoHeap.filter(t => !t.id.includes(parsedAction.target));
-  let messageGroup = MessageGroupFactory.create(parsedAction.command, state.todoHeap.slice(0, 5));
-  state.messageGroups = [...state.messageGroups, messageGroup];
+const remove = (state: State, parsedAction: RemoveCommand): State => {
+  state.todoHeap = reject(state.todoHeap, todo => includes(parsedAction.targets, todo.id));
+  return list(state, parsedAction);
+};
+
+const invalid = (state: State, parsedAction: InvalidCommand): State => {
+  state.messageGroups = [...state.messageGroups, MessageGroupFactory.createInvalid(parsedAction.command)];
   return state;
+};
+
+const mapRefs = (state: State, todos: TodoModel[]): {state: State, todoViewModels: TodoViewModel[]} => {
+  state.todoRefs = new Map();
+  let id = 1;
+  const todoViewModels = todos.map(t => {
+    state.todoRefs.set(id, t);
+    return Object.assign({}, t, {todoRef: id++});
+  });
+  return {state, todoViewModels};
+};
+
+const mapTargets = (state: State, targets: string[]): string[] => {
+  return targets.map((target) => {
+    const parsedTarget = parseInt(target, 10);
+    if (isNaN(target as any) && parsedTarget > 0 && parsedTarget < 100)
+      return target;
+    if (state.todoRefs.has(parsedTarget)) {
+      const todoModel = state.todoRefs.get(parsedTarget) as TodoModel;
+      return todoModel.id;
+    }
+    return target;
+  });
 };
 
 type TodoCommandTypes = 'add' | 'list' | 'remove' | 'edit' | 'commit' | 'invalid';
 
-interface invalidCommand {
+interface AbstractCommand {
+  command: string;
+  commandType: TodoCommandTypes;
+  flags?: Object | null;
+}
+
+interface InvalidCommand extends AbstractCommand {
   commandType: 'invalid';
 }
 
-interface addCommand {
-  command: string;
+interface AddCommand extends AbstractCommand {
   commandType: 'add';
-  flags: Object | null;
   text: string;
 }
 
-interface listCommand {
-  command: string;
+interface ListCommand extends AbstractCommand {
   commandType: 'list';
-  flags: Object | null;
 }
 
-interface removeCommand {
-  command: string;
+interface RemoveCommand extends AbstractCommand {
   commandType: 'remove';
-  target: string;
-  flags: Object | null;
+  targets: string[];
 }
 
 function isValidCommandType(actionWord: string): actionWord is TodoCommandTypes {
@@ -75,13 +112,23 @@ const mapAlias = (commandType: string): string => ({
   'l': 'list',
   'a': 'add',
   'rm': 'remove',
-}[commandType]);
+}[commandType] || commandType);
 
-function parseCommand(command: string): invalidCommand | addCommand | listCommand | removeCommand {
-  const tokens = command.split(' ');
+function tokenize(command: string): string[] {
+  return command.split(' ').map(word => {
+    if (isNaN(word as any)) {
+      return word;
+    }
+    return word;
+  });
+}
+
+function parseCommand(command: string): InvalidCommand | AddCommand | ListCommand | RemoveCommand {
+  const tokens = tokenize(command);
   const commandType = mapAlias(tokens[0]);
+  const invalidCommand: InvalidCommand = {commandType: 'invalid', command};
   if (!isValidCommandType(commandType))
-    return {commandType: 'invalid'};
+    return invalidCommand;
   if (commandType === 'add')
     return {
       command,
@@ -96,15 +143,14 @@ function parseCommand(command: string): invalidCommand | addCommand | listComman
       flags: {},
     };
   if (commandType === 'remove') {
-    // Make sure target is at least 5 characters long
-    const target = tokens[1];
-    if (target && target.length > 5)
+    const targets = tokens.slice(1);
+    if (targets.length)
       return {
         command,
         commandType,
-        target: target,
+        targets,
         flags: {},
       };
   }
-  return {commandType: 'invalid'};
+  return invalidCommand;
 }

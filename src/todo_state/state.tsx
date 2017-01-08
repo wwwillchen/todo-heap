@@ -5,4 +5,5 @@ export interface State {
   todoHeap: TodoModel[];
   todoMap: Map<string, TodoModel>;
   messageGroups: MessageGroups;
+  todoRefs: Map<number, TodoModel>;
 }

@@ -29,7 +29,17 @@ body {
 
 #main > .ui.message {
   background: hsla(222, 13%, 24%, 0.92);
-    color: #e7e7f5;
+  color: #e7e7f5;
+}
+
+#main .ui.label {
+  margin-right: 8px;
+  background: #b9d7f1;
+}
+
+.item-id {
+ font-style: italic;
+ float: right;
 }
 
 #footer {
@@ -40,3 +50,4 @@ body {
 #footer > input {
   background: #57636d;
 }
+

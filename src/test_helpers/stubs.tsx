@@ -12,6 +12,7 @@ const generateRandomMessage = (): MessageItemProps => {
     priority: Math.floor(Math.random() * 5),
     text: [randomWord(), randomWord(), randomWord()].join(' '),
     id: guid(),
+    todoRef: 99,
   };
 };
 

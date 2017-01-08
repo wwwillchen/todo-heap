@@ -4,7 +4,7 @@ import { textInputActionCreator } from '../todo_action/actions';
 
 import './app.css';
 
-import {MessageDisplayWidget, MessageGroups, MessageDisplayProps} from './message/message_display_widget';
+import {MessageDisplayWidget, MessageGroups, MessageDisplayProps} from './message';
 import {ChatInputWidget} from './chat_input';
 
 const HeaderWidget = () => (
