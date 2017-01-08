@@ -1,14 +1,14 @@
-type TodoStatus = "Done" | "NotDone" | "Deleted";
+type TodoStatus = 'Done' | 'NotDone' | 'Deleted';
 type TodoDate = number | null;
 
 export interface TodoEntity {
-  id: string,
-  priority: number,
-  text: string,
-  status: TodoStatus,
-  timeCreated: TodoDate,
-  timeDone: TodoDate,
-  timeDeleted: TodoDate,
+  id: string;
+  priority: number;
+  text: string;
+  status: TodoStatus;
+  timeCreated: TodoDate;
+  timeDone: TodoDate;
+  timeDeleted: TodoDate;
 }
 
 export class TodoModel implements TodoEntity {

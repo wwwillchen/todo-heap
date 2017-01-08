@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { Message } from 'semantic-ui-react'
+import { Message } from 'semantic-ui-react';
 
 import {MessageItemWidget, MessageItemProps} from './message_item_widget';
 
@@ -17,4 +17,4 @@ export const MessageGroupWidget = (props: MessageGroupProps) => (
       {props.messages.map(m => <MessageItemWidget key={m.id} id={m.id} text={m.text} priority={m.priority}/>)}
     </Message.List>
   </Message>
-)
+);

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { createStore, bindActionCreators } from 'redux'
-import { Provider } from 'react-redux'
-import { connect } from 'react-redux'
+import { createStore, bindActionCreators } from 'redux';
+import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
 
 import {App, AppProps} from './web_ui/app';
 import {todoReducer} from './todo_reducer/todo_reducer';
@@ -34,7 +34,7 @@ const mapStateToProps = (state: State) => ({
 const ConnectedApp = connect(
   mapStateToProps,
   mapDispatchToProps
-)(App)
+)(App);
 
 ReactDOM.render(
   <Provider store={store}>

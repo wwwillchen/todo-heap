@@ -9,7 +9,7 @@ import {MessageDisplayWidget} from '../message_display_widget';
 
 it('renders a message item', () => {
   const wrapper = mount(<MessageItemWidget id={'1'} key={'1'} priority={1} text={'Take out the trash'}/>);
-  expect(wrapper.text()).toEqual("P1 Take out the trash");
+  expect(wrapper.text()).toEqual('P1 Take out the trash');
 });
 
 it('renders a message group', () => {
@@ -20,7 +20,7 @@ it('renders a message group', () => {
   ];
 
   const component = renderer.create(
-    <MessageGroupWidget messages={messages} id={'1'} command='ls -n 5'/>
+    <MessageGroupWidget messages={messages} id={'1'} command="ls -n 5"/>
   );
   let tree = component.toJSON();
   expect(tree).toMatchSnapshot();

@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import { Input} from 'semantic-ui-react'
+import { Input} from 'semantic-ui-react';
 
 export interface ChatInputProps {
-  action: any
+  action: any;
 }
 
 const onSubmit = (e: any) => {
@@ -23,4 +23,4 @@ export const ChatInputWidget = (props: ChatInputProps) => (
       }}/>
     </div>
   </div>
-)
+);

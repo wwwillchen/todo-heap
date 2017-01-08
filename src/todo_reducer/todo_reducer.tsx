@@ -1,6 +1,6 @@
 import {State} from '../todo_state/state';
 import {TodoFactory} from '../todo/todo_factory';
-import {MessageGroupFactory} from "../message_presenter/message_factory";
+import {MessageGroupFactory} from '../message_presenter/message_factory';
 import {textInputActionCreator, Action, TEXT_INPUT} from '../todo_action/actions';
 
 export const todoReducer = (state: State, action: Action): State => {
@@ -17,7 +17,7 @@ export const todoReducer = (state: State, action: Action): State => {
       return remove(newState, parsedAction);
   }
   return newState;
-}
+};
 
 const add = (state: State, parsedAction: addCommand): State => {
   const todo = TodoFactory.createTodo(parsedAction.text);
@@ -31,14 +31,14 @@ const list = (state: State, parsedAction: listCommand): State => {
   let messageGroup = MessageGroupFactory.create(parsedAction.command, state.todoHeap.slice(0, 5));
   state.messageGroups = [...state.messageGroups, messageGroup];
   return state;
-}
+};
 
 const remove = (state: State, parsedAction: removeCommand): State => {
-  state.todoHeap = state.todoHeap.filter(t => !t.id.includes(parsedAction.target))
+  state.todoHeap = state.todoHeap.filter(t => !t.id.includes(parsedAction.target));
   let messageGroup = MessageGroupFactory.create(parsedAction.command, state.todoHeap.slice(0, 5));
   state.messageGroups = [...state.messageGroups, messageGroup];
   return state;
-}
+};
 
 type TodoCommandTypes = 'add' | 'list' | 'remove' | 'edit' | 'commit' | 'invalid';
 
@@ -75,7 +75,7 @@ const mapAlias = (commandType: string): string => ({
   'l': 'list',
   'a': 'add',
   'rm': 'remove',
-}[commandType])
+}[commandType]);
 
 function parseCommand(command: string): invalidCommand | addCommand | listCommand | removeCommand {
   const tokens = command.split(' ');
@@ -94,7 +94,7 @@ function parseCommand(command: string): invalidCommand | addCommand | listComman
       command,
       commandType,
       flags: {},
-    }
+    };
   if (commandType === 'remove') {
     // Make sure target is at least 5 characters long
     const target = tokens[1];
@@ -104,7 +104,7 @@ function parseCommand(command: string): invalidCommand | addCommand | listComman
         commandType,
         target: target,
         flags: {},
-      }
+      };
   }
   return {commandType: 'invalid'};
 }

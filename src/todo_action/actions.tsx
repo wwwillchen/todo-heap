@@ -9,5 +9,5 @@ export function textInputActionCreator(command: string): Action {
   return {
     type: TEXT_INPUT,
     command,
-  }
+  };
 }

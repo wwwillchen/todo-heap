@@ -17,7 +17,7 @@ export class MessageDisplayWidget extends React.Component<MessageDisplayProps, n
 
   render() {
     return (
-      <div id='main'>
+      <div id="main">
         {this.props.groups.map(group => <MessageGroupWidget
           key={group.id} id={group.id}
           command={group.command}
