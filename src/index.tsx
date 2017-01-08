@@ -9,7 +9,15 @@ import {todoReducer} from './todo_reducer/todo_reducer';
 import {State, mapStateToProps} from './todo_state/state';
 import {mapDispatchToProps} from './todo_action/actions';
 
-const store = createStore(todoReducer);
+import {messageStubs} from './test_helpers/stubs';
+
+const preloadedState: State = {
+  messageGroups: messageStubs,
+  todoMap: new Map(),
+  todoHeap: [],
+};
+
+const store = createStore(todoReducer, preloadedState);
 
 const ConnectedApp = connect(
   mapStateToProps,

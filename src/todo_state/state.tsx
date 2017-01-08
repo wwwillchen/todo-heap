@@ -1,11 +1,12 @@
 import {TodoModel} from '../todo/todo_entity';
+import {MessageGroups} from "../web_ui/message/message_display_widget";
 
 export interface State {
   todoHeap: TodoModel[],
   todoMap: Map<string, TodoModel>,
-  displayGroups: any[],
+  messageGroups: MessageGroups,
 }
 
 export const mapStateToProps = (state: State) => ({
-  displayGroups: state.displayGroups,
+  messageGroups: state.messageGroups,
 });

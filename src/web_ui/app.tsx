@@ -16,13 +16,13 @@ const HeaderWidget = () => (
 )
 
 export interface AppProps {
-  displayGroups: MessageGroups,
+  messageGroups: MessageGroups,
 }
 
 export const App = (props: AppProps) => (
         <div id='app'>
             <HeaderWidget/>
-            <MessageDisplayWidget groups={props.displayGroups}/>
+            <MessageDisplayWidget groups={props.messageGroups}/>
             <ChatInputWidget/>
         </div>
 );
