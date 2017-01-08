@@ -1,9 +1,24 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import App from './chat_ui/app';
-import './index.css';
+import { createStore, bindActionCreators } from 'redux'
+import { Provider } from 'react-redux'
+import { connect } from 'react-redux'
+
+import {App, AppProps} from './web_ui/app';
+import {todoReducer} from './todo_reducer/todo_reducer';
+import {State, mapStateToProps} from './todo_state/state';
+import {mapDispatchToProps} from './todo_action/actions';
+
+const store = createStore(todoReducer);
+
+const ConnectedApp = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App)
 
 ReactDOM.render(
-  <App />,
+  <Provider store={store}>
+    <ConnectedApp />
+  </Provider>,
   document.getElementById('root') as HTMLElement
 );

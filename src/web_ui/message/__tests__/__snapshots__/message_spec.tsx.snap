@@ -1,0 +1,132 @@
+exports[`test renders a message display 1`] = `
+<div
+  id="main">
+  <div
+    className="ui message">
+    <div
+      className="header">
+      list -n 10
+    </div>
+    <ul
+      className="list">
+      <li
+        className="content">
+        P
+        1
+         
+        foo bar
+      </li>
+      <li
+        className="content">
+        P
+        1
+         
+        baz
+      </li>
+      <li
+        className="content">
+        P
+        2
+         
+        what
+      </li>
+    </ul>
+  </div>
+  <div
+    className="ui message">
+    <div
+      className="header">
+      list -n 10
+    </div>
+    <ul
+      className="list">
+      <li
+        className="content">
+        P
+        1
+         
+        foo bar
+      </li>
+      <li
+        className="content">
+        P
+        1
+         
+        baz
+      </li>
+      <li
+        className="content">
+        P
+        2
+         
+        what
+      </li>
+    </ul>
+  </div>
+  <div
+    className="ui message">
+    <div
+      className="header">
+      list -n 10
+    </div>
+    <ul
+      className="list">
+      <li
+        className="content">
+        P
+        1
+         
+        foo bar
+      </li>
+      <li
+        className="content">
+        P
+        1
+         
+        baz
+      </li>
+      <li
+        className="content">
+        P
+        2
+         
+        what
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`test renders a message group 1`] = `
+<div
+  className="ui message">
+  <div
+    className="header">
+    ls -n 5
+  </div>
+  <ul
+    className="list">
+    <li
+      className="content">
+      P
+      1
+       
+      foo bar
+    </li>
+    <li
+      className="content">
+      P
+      1
+       
+      baz
+    </li>
+    <li
+      className="content">
+      P
+      2
+       
+      what
+    </li>
+  </ul>
+</div>
+`;
