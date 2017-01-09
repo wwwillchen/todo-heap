@@ -7,10 +7,9 @@ export class TodoFactory {
       text,
       id: guid(),
       priority: priority || 0,
-      status: 'NotDone',
       timeCreated: null,
-      timeDone: null,
-      timeDeleted: null,
+      timeRemoved: null,
+      removed: false,
     });
   }
 }

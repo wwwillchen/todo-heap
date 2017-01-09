@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { Message } from 'semantic-ui-react';
 
-import {MessageItemWidget, MessageItemProps} from './';
+import {MessageItemWidget, MessageItemProps, MessageWarningWidget} from './';
 
 export interface MessageGroupProps {
   messages: MessageItemProps[];
@@ -11,21 +11,9 @@ export interface MessageGroupProps {
   warnings?: string[];
 }
 
-export interface MessageWarningProps {
-  text: string;
-}
-
-export const MessageWarningWidget = (props: MessageWarningProps) => (
-  <Message error>
-    <Message.Item>
-      {props.text}
-    </Message.Item>
-  </Message>
-);
-
 export const MessageGroupWidget = (props: MessageGroupProps) => {
   const warnings = props.warnings ? props.warnings.map(w =>
-            <MessageWarningWidget text={w}>
+            <MessageWarningWidget text={w} key={w}>
             </MessageWarningWidget>
           ): null;
   return (
@@ -35,6 +23,7 @@ export const MessageGroupWidget = (props: MessageGroupProps) => {
         {warnings}
         {props.messages.map(m =>
           <MessageItemWidget
+            removed={m.removed}
             todoRef={m.todoRef}
             key={m.id} id={m.id}
             text={m.text}

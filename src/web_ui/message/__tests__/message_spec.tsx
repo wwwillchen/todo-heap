@@ -1,18 +1,18 @@
-// import * as React from 'react';
-// import * as ReactDOM from 'react-dom';
-// import { shallow, mount } from 'enzyme';
-// import * as renderer from 'react-test-renderer';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { shallow, mount } from 'enzyme';
+import * as renderer from 'react-test-renderer';
 
-// import {MessageItemWidget} from '../message_item_widget';
-// import {MessageGroupWidget, MessageGroupProps} from '../message_group_widget';
-// import {MessageDisplayWidget} from '../message_display_widget';
+import {MessageItemWidget} from '../message_item_widget';
+import {MessageGroupWidget, MessageGroupProps} from '../message_group_widget';
+import {MessageDisplayWidget} from '../message_display_widget';
 
-// it('renders a message item', () => {
+// it.skip('renders a message item', () => {
 //   const wrapper = mount(<MessageItemWidget id={'1'} key={'1'} priority={1} text={'Take out the trash'}/>);
 //   expect(wrapper.text()).toEqual('P1 Take out the trash');
 // });
 
-// it('renders a message group', () => {
+// it.skip('renders a message group', () => {
 //   const messages = [
 //     {ref: 1, id: '1', priority: 1, text: 'foo bar'},
 //     {ref: 2, id: '2', priority: 1, text: 'baz'},
@@ -26,7 +26,7 @@
 //   expect(tree).toMatchSnapshot();
 // });
 
-// it('renders a message display', () => {
+// it.skip('renders a message display', () => {
 //   const messages = [
 //     {ref: 1, id: '1', priority: 1, text: 'foo bar'},
 //     {ref: 2, id: '2', priority: 1, text: 'baz'},

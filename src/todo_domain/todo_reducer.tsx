@@ -6,7 +6,10 @@ import {reject, includes} from '../utils';
 import {parseArgs} from "./parse_args";
 
 export const todoReducer = (state: State, action: Action): State => {
-  const newState = Object.assign({}, state);
+  const newState = Object.assign({}, state, {
+    todoHeap: state.todoHeap.clone(),
+    messageGroups: state.messageGroups.slice(),
+  });
   if (action.type !== TEXT_INPUT)
     return newState;
   const parsedAction = parseCommand(action.command);
@@ -26,11 +29,8 @@ export const todoReducer = (state: State, action: Action): State => {
 
 const add = (state: State, parsedAction: AddCommand): State => {
   const todo = TodoFactory.createTodo(parsedAction.text);
-  state.todoHeap = [todo, ...state.todoHeap];
-  let todoViewModels;
-  ({state, todoViewModels} = mapRefs(state, [todo]));
-  let messageGroup = MessageGroupFactory.create(parsedAction.command, todoViewModels);
-  state.messageGroups = [...state.messageGroups, messageGroup];
+  state.todoHeap.add(todo);
+  state.messageGroups.push(MessageGroupFactory.create(parsedAction.command, mapRefs(state, [todo])));
   return state;
 };
 
@@ -38,22 +38,17 @@ const DEFAULT_SIZE = 5;
 
 const list = (state: State, parsedAction: AbstractCommand): State => {
   const flags = parsedAction.flags as any;
-  const numberToDisplay = flags.number || DEFAULT_SIZE;
-  let todos = state.todoHeap.slice(0, numberToDisplay);
-  // if (flags.reverse)
-    // todos = state.todoHeap.slice(0, numberToDisplay, -1);;
-  // else
-    todos = state.todoHeap.slice(0, numberToDisplay);
-  let todoViewModels;
-  ({state, todoViewModels} = mapRefs(state, todos));
-  const messageGroup = MessageGroupFactory.create(parsedAction.command, todoViewModels);
-  state.messageGroups = [...state.messageGroups, messageGroup];
+  const numberToDisplay = flags.all && state.todoHeap.getSize() || flags.number || DEFAULT_SIZE;
+  const fetch = flags.reverse ? state.todoHeap.fetchFromTop : state.todoHeap.fetchFromBottom;
+  const todos = fetch(numberToDisplay);
+  state.messageGroups.push(MessageGroupFactory.create(parsedAction.command, mapRefs(state, todos)));
   return state;
 };
 
 const remove = (state: State, parsedAction: RemoveCommand): State => {
-  state.todoHeap = reject(state.todoHeap, todo => includes(parsedAction.targets, todo.id));
-  return list(state, parsedAction);
+  const todos = parsedAction.targets.map(target => state.todoHeap.remove(target)).filter(x => !!x) as TodoModel[]
+  state.messageGroups.push(MessageGroupFactory.create(parsedAction.command, mapRefs(state, todos)));
+  return state;
 };
 
 const invalid = (state: State, parsedAction: InvalidCommand): State => {
@@ -61,14 +56,14 @@ const invalid = (state: State, parsedAction: InvalidCommand): State => {
   return state;
 };
 
-const mapRefs = (state: State, todos: TodoModel[]): {state: State, todoViewModels: TodoViewModel[]} => {
+const mapRefs = (state: State, todos: TodoModel[]): TodoViewModel[] => {
   state.todoRefs = new Map();
   let id = 1;
   const todoViewModels = todos.map(t => {
     state.todoRefs.set(id, t);
     return Object.assign({}, t, {todoRef: id++});
   });
-  return {state, todoViewModels};
+  return todoViewModels;
 };
 
 const mapTargets = (state: State, targets: string[]): string[] => {
@@ -89,7 +84,7 @@ type TodoCommandTypes = 'add' | 'list' | 'remove' | 'edit' | 'commit' | 'invalid
 interface AbstractCommand {
   command: string;
   commandType: TodoCommandTypes;
-  flags?: Object | null;
+  flags: {string: string[]};
 }
 
 interface InvalidCommand extends AbstractCommand {
@@ -148,7 +143,11 @@ function parseCommand(command: string): InvalidCommand | AddCommand | ListComman
     flags.number = parseInt(flags.number, 10);
   }
   const commandType = mapAlias(unflaggedArgs[0]);
-  const invalidCommand: InvalidCommand = {commandType: 'invalid', command};
+  const invalidCommand: InvalidCommand = {
+    commandType: 'invalid',
+    command,
+    flags,
+  };
   if (!isValidCommandType(commandType))
     return invalidCommand;
   if (commandType === 'add')

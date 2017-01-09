@@ -9,12 +9,11 @@ import {todoReducer} from './todo_domain';
 import {State} from './todo_state/state';
 import {textInputActionCreator} from './todo_action/actions';
 
-import {messageStubs, todoStubs} from './test_helpers/stubs';
+import {messageStubs, todoHeapStub} from './test_helpers/stubs';
 
 const preloadedState: State = {
   messageGroups: messageStubs,
-  todoMap: new Map(),
-  todoHeap: todoStubs,
+  todoHeap: todoHeapStub,
   todoRefs: new Map(),
 };
 
