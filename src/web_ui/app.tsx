@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Header } from 'semantic-ui-react';
-import { textInputActionCreator } from '../todo_action/actions';
 
 import './app.css';
 
+import { textInputActionCreator } from '../todo_action';
 import {MessageDisplayWidget, MessageGroups, MessageDisplayProps} from './message';
 import {ChatInputWidget} from './chat_input';
 

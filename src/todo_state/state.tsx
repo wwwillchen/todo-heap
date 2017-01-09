@@ -1,5 +1,5 @@
-import {TodoModel} from '../todo/todo_entity';
-import {MessageGroups} from '../web_ui/message/message_display_widget';
+import {TodoModel} from '../todo_object/';
+import {MessageGroups} from '../web_ui';
 
 export interface State {
   todoHeap: TodoModel[];

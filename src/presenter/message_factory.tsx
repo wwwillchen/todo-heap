@@ -1,11 +1,8 @@
-import {MessageGroupProps} from '../web_ui/message/message_group_widget';
-import {MessageItemProps} from '../web_ui/message/message_item_widget';
-import {TodoModel} from '../todo/todo_entity';
-import {guid} from '../utils/utils';
-
-export interface TodoViewModel extends TodoModel {
-  todoRef: number;
-}
+import {MessageGroupProps} from '../web_ui';
+import {MessageItemProps} from '../web_ui';
+import {TodoModel} from '../todo_object';
+import {guid} from '../utils';
+import {TodoViewModel} from "./";
 
 export class MessageGroupFactory {
   static create(command: string, todos: TodoViewModel[]): MessageGroupProps {

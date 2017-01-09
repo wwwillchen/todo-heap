@@ -1,9 +1,9 @@
-import {State} from '../todo_state/state';
-import {TodoModel} from '../todo/todo_entity';
-import {TodoFactory} from '../todo/todo_factory';
-import {MessageGroupFactory, TodoViewModel} from '../message_presenter/message_factory';
-import {textInputActionCreator, Action, TEXT_INPUT} from '../todo_action/actions';
+import {State} from '../todo_state';
+import {TodoModel, TodoFactory} from '../todo_object';
+import {MessageGroupFactory, TodoViewModel} from '../presenter';
+import {textInputActionCreator, Action, TEXT_INPUT} from '../todo_action';
 import {reject, includes} from '../utils';
+import {parseArgs} from "./parse_args";
 
 export const todoReducer = (state: State, action: Action): State => {
   const newState = Object.assign({}, state);
@@ -37,9 +37,16 @@ const add = (state: State, parsedAction: AddCommand): State => {
 const DEFAULT_SIZE = 5;
 
 const list = (state: State, parsedAction: AbstractCommand): State => {
+  const flags = parsedAction.flags as any;
+  const numberToDisplay = flags.number || DEFAULT_SIZE;
+  let todos = state.todoHeap.slice(0, numberToDisplay);
+  // if (flags.reverse)
+    // todos = state.todoHeap.slice(0, numberToDisplay, -1);;
+  // else
+    todos = state.todoHeap.slice(0, numberToDisplay);
   let todoViewModels;
-  ({state, todoViewModels} = mapRefs(state, state.todoHeap.slice(0, DEFAULT_SIZE)));
-  let messageGroup = MessageGroupFactory.create(parsedAction.command, todoViewModels);
+  ({state, todoViewModels} = mapRefs(state, todos));
+  const messageGroup = MessageGroupFactory.create(parsedAction.command, todoViewModels);
   state.messageGroups = [...state.messageGroups, messageGroup];
   return state;
 };
@@ -107,12 +114,7 @@ function isValidCommandType(actionWord: string): actionWord is TodoCommandTypes 
     return ['add', 'list', 'edit', 'commit', 'remove'].indexOf(actionWord) !== -1;
 }
 
-const mapAlias = (commandType: string): string => ({
-  'ls': 'list',
-  'l': 'list',
-  'a': 'add',
-  'rm': 'remove',
-}[commandType] || commandType);
+const mapAlias = (commandType: string): string => commandAlias[commandType] || commandType;
 
 function tokenize(command: string): string[] {
   return command.split(' ').map(word => {
@@ -123,9 +125,29 @@ function tokenize(command: string): string[] {
   });
 }
 
+const commandAlias = {
+  'ls': 'list',
+  'l': 'list',
+  'a': 'add',
+  'rm': 'remove',
+  'h': 'help',
+};
+
+const flagAlias = {
+  'n': 'number',
+  'p': 'priority',
+  'r': 'reverse',
+  'a': 'all',
+};
+
 function parseCommand(command: string): InvalidCommand | AddCommand | ListCommand | RemoveCommand {
-  const tokens = tokenize(command);
-  const commandType = mapAlias(tokens[0]);
+  const argsObject = parseArgs(command, flagAlias);
+  const unflaggedArgs = argsObject._;
+  const flags = {...argsObject, _: undefined} as any;
+  if (flags.number) {
+    flags.number = parseInt(flags.number, 10);
+  }
+  const commandType = mapAlias(unflaggedArgs[0]);
   const invalidCommand: InvalidCommand = {commandType: 'invalid', command};
   if (!isValidCommandType(commandType))
     return invalidCommand;
@@ -133,23 +155,23 @@ function parseCommand(command: string): InvalidCommand | AddCommand | ListComman
     return {
       command,
       commandType,
-      text: tokens.slice(1).join(' '),
-      flags: {},
+      text: unflaggedArgs.slice(1).join(' '),
+      flags,
     };
   if (commandType === 'list')
     return {
       command,
       commandType,
-      flags: {},
+      flags,
     };
   if (commandType === 'remove') {
-    const targets = tokens.slice(1);
+    const targets = unflaggedArgs.slice(1);
     if (targets.length)
       return {
         command,
         commandType,
         targets,
-        flags: {},
+        flags,
       };
   }
   return invalidCommand;

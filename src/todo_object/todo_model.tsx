@@ -1,15 +1,4 @@
-type TodoStatus = 'Done' | 'NotDone' | 'Deleted';
-type TodoDate = number | null;
-
-export interface TodoEntity {
-  id: string;
-  priority: number;
-  text: string;
-  status: TodoStatus;
-  timeCreated: TodoDate;
-  timeDone: TodoDate;
-  timeDeleted: TodoDate;
-}
+import {TodoEntity, TodoStatus, TodoDate} from "./";
 
 export class TodoModel implements TodoEntity {
   public id: string;

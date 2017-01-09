@@ -1,5 +1,5 @@
-import {TodoModel} from './todo_entity';
-import {guid} from '../utils/utils';
+import {TodoModel} from './';
+import {guid} from '../utils';
 
 export class TodoFactory {
   static createTodo(text: string, priority?: number): TodoModel {

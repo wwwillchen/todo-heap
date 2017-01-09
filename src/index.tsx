@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 
 import {App, AppProps} from './web_ui/app';
-import {todoReducer} from './todo_reducer/todo_reducer';
+import {todoReducer} from './todo_domain';
 import {State} from './todo_state/state';
 import {textInputActionCreator} from './todo_action/actions';
 
