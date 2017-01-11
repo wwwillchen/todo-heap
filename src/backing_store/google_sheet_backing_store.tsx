@@ -6,17 +6,17 @@ export const api = gapi as any;
 export const authAPI = gapi.auth;
 
 export function loadSheetsApi() {
-  var discoveryUrl =
-      'https://sheets.googleapis.com/$discovery/rest?version=v4';
-  api.client.load(discoveryUrl).then(listMajors);
+    var discoveryUrl =
+        'https://sheets.googleapis.com/$discovery/rest?version=v4';
+    api.client.load(discoveryUrl).then(listMajors);
 };
 
 function createSheetIfNecessary() {
- // see if the sheet exists
+    // see if the sheet exists
 }
 
 function reloadTodoHeap() {
-  // send a redux event
+    // send a redux event
 }
 
 function insertTodo() {
@@ -36,24 +36,24 @@ function editTodo() {
  */
 
 function listMajors() {
-  api.client.sheets.spreadsheets.values.get({
-    spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
-    range: 'Class Data!A2:E',
-  }).then(function(response: any) {
-    var range = response.result;
-    console.log('response', response);
-  //   if (range.values.length > 0) {
-  //     appendPre('Name, Major:');
-  //     for (i = 0; i < range.values.length; i++) {
-  //       var row = range.values[i];
-  //       // Print columns A and E, which correspond to indices 0 and 4.
-  //       appendPre(row[0] + ', ' + row[4]);
-  //     }
-  //   } else {
-  //     appendPre('No data found.');
-  //   }
-  // }, function(response) {
-  //   appendPre('Error: ' + response.result.error.message);
-  // });
-  });
+    api.client.sheets.spreadsheets.values.get({
+        spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
+        range: 'Class Data!A2:E',
+    }).then(function(response: any) {
+        var range = response.result;
+        console.log('response', response);
+        //   if (range.values.length > 0) {
+        //     appendPre('Name, Major:');
+        //     for (i = 0; i < range.values.length; i++) {
+        //       var row = range.values[i];
+        //       // Print columns A and E, which correspond to indices 0 and 4.
+        //       appendPre(row[0] + ', ' + row[4]);
+        //     }
+        //   } else {
+        //     appendPre('No data found.');
+        //   }
+        // }, function(response) {
+        //   appendPre('Error: ' + response.result.error.message);
+        // });
+    });
 }

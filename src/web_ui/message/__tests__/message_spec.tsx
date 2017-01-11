@@ -3,9 +3,9 @@ import * as ReactDOM from 'react-dom';
 import { shallow, mount } from 'enzyme';
 import * as renderer from 'react-test-renderer';
 
-import {MessageItemWidget} from '../message_item_widget';
-import {MessageGroupWidget, MessageGroupProps} from '../message_group_widget';
-import {MessageDisplayWidget} from '../message_display_widget';
+import { MessageItemWidget } from '../message_item_widget';
+import { MessageGroupWidget, MessageGroupProps } from '../message_group_widget';
+import { MessageDisplayWidget } from '../message_display_widget';
 
 // it.skip('renders a message item', () => {
 //   const wrapper = mount(<MessageItemWidget id={'1'} key={'1'} priority={1} text={'Take out the trash'}/>);
