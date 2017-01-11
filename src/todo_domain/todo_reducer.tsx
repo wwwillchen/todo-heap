@@ -39,8 +39,7 @@ const DEFAULT_SIZE = 5;
 const list = (state: State, parsedAction: AbstractCommand): State => {
   const flags = parsedAction.flags as any;
   const numberToDisplay = flags.all && state.todoHeap.getSize() || flags.number || DEFAULT_SIZE;
-  const fetch = flags.reverse ? state.todoHeap.fetchFromTop : state.todoHeap.fetchFromBottom;
-  const todos = fetch(numberToDisplay);
+  const todos = flags.reverse ? state.todoHeap.fetchFromTop(numberToDisplay) : state.todoHeap.fetchFromBottom(numberToDisplay);
   state.messageGroups.push(MessageGroupFactory.create(parsedAction.command, mapRefs(state, todos)));
   return state;
 };
