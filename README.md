@@ -1,5 +1,7 @@
 # Todo Heap
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/wwwillchen/todo-heap.svg)](https://greenkeeper.io/)
+
 Quickly manage your todos with a keyboard-only interface.
 
 ## Widget hierarchy
